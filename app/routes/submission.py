@@ -31,13 +31,24 @@ def submit_form(payload: Dict[str, Any], db: Session = Depends(get_db)):
 
 
 @router.get("/submissions")
-def get_submissions(db: Session = Depends(get_db)) -> List[Dict[str, Any]]:
-    results = db.query(Submission).order_by(Submission.id.desc()).all()
-    return [
-        {
-            "id": r.id,
-            "data": r.data,
-            "submitted_at": r.submitted_at.isoformat()
-        }
-        for r in results
-    ]
+def get_submissions(db: Session = Depends(get_db)):
+    submissions = db.query(Submission).all()
+    result = []
+
+    for s in submissions:
+        # Make sure 'data' is a Python dict, not stringified
+        if isinstance(s.data, str):
+            try:
+                parsed_data = json.loads(s.data)
+            except json.JSONDecodeError:
+                parsed_data = s.data  # fallback
+        else:
+            parsed_data = s.data
+
+        result.append({
+            "id": s.id,
+            "data": parsed_data,
+            "submitted_at": s.submitted_at,
+        })
+
+    return result
