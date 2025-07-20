@@ -6,9 +6,9 @@ The backend is designed to be flexible and supports two ways to run:
 - ✅ **Fully Dockerized** (FastAPI + PostgreSQL)
 - ✅ **FastAPI running locally, PostgreSQL running in Docker**
 
----
 
-## 🚀 Features
+
+# 🚀 Features
 
 - ⚡ High-performance FastAPI framework
 - 🐘 PostgreSQL database integration
@@ -16,9 +16,7 @@ The backend is designed to be flexible and supports two ways to run:
 - 📦 Docker support for easy deployment
 - 🔁 Live-reload for local development
 
----
-
-## 📁 Project Structure
+# 📁 Project Structure
 dynamic-form-backend/
 ├── app/ # FastAPI application source
 │ └── main.py # Application entry point
@@ -29,24 +27,20 @@ dynamic-form-backend/
 └── README.md
 
 
----
-
-## 📦 Requirements
+#📦 Requirements
 
 - Python 3.10+
 - Docker + Docker Compose
 - `venv` or `virtualenv` for local development
 
----
-
-## ⚙️ Environment Configuration
+# ⚙️ Environment Configuration
 
 Create a `.env` file in the project root:
 
-### ✅ For Docker Compose:
+# ✅ For Docker Compose:
 
 ```env
-# .env
+  .env
 DB_USER=postgres
 DB_PASSWORD=mysecretpassword
 DB_NAME=formdb
@@ -58,11 +52,11 @@ DATABASE_URL=postgresql://postgres:mysecretpassword@db:5432/formdb
 For Localhost FastAPI add to the env file:
 DATABASE_URL_LOCAL_APP=postgresql://postgres:mysecretpassword@localhost:5432/formdb
 ```
-### Run and build the backend application + postgres:
+# Run and build the backend application + postgres:
 # Start
 ```docker-compose up --build```
 
-### In case you run the FastAPI on localhost:
+# In case you run the FastAPI on localhost:
 ```
 python3 -m venv venv
 source venv/bin/activate
