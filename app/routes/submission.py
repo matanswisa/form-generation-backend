@@ -4,7 +4,7 @@ from typing import Dict, Any, List
 import json
 from database import get_db
 from models import Submission
-
+from sqlalchemy import func, cast, Float
 router = APIRouter()
 
 @router.post("/submit")
@@ -59,12 +59,11 @@ def get_submissions(db: Session = Depends(get_db)):
         return result
     
     for s in submissions:
-        # Make sure 'data' is a Python dict, not stringified
         if isinstance(s.data, str):
             try:
                 parsed_data = json.loads(s.data)
             except json.JSONDecodeError:
-                parsed_data = s.data  # fallback
+                parsed_data = s.data 
         else:
             parsed_data = s.data
 
@@ -76,3 +75,23 @@ def get_submissions(db: Session = Depends(get_db)):
         })
 
     return result
+
+@router.get("/analytics")
+def get_submissions_anayltics(db: Session = Depends(get_db)):
+    num_of_males = db.query(Submission).filter(func.lower(Submission.data["gender"].astext) == "male").count()
+    num_of_females = db.query(Submission).filter(func.lower(Submission.data["gender"].astext) == "female").count()
+    total_submissions = db.query(Submission).count()
+
+    avg_age = db.query(
+        func.avg(
+            cast(Submission.data["age"].astext, Float)
+        )
+    ).scalar()
+
+
+    return {
+        "total_submissions": total_submissions,
+        "submissions_made_by_males": num_of_males,
+        "submissions_made_by_females":num_of_females,
+        "avg_age":avg_age
+    }
